@@ -15,9 +15,24 @@ class DroneRepairScene extends Phaser.Scene {
   }
 
   create() {
-    // Obtener dimensiones dinámicas de la pantalla
-    this.screenWidth = this.cameras.main.width;
-    this.screenHeight = this.cameras.main.height;
+    // Obtener dimensiones dinámicas de la pantalla - mejorado para móviles
+    this.screenWidth = this.sys.game.config.width;
+    this.screenHeight = this.sys.game.config.height;
+    
+    // Detectar si es móvil y ajustar dimensiones
+    this.isMobile = /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
+    
+    // Para móviles, usar las dimensiones reales del viewport si están disponibles
+    if (this.isMobile) {
+      const actualWidth = this.sys.game.canvas.width;
+      const actualHeight = this.sys.game.canvas.height;
+      
+      // Usar las dimensiones reales si son diferentes a las configuradas
+      if (actualWidth > 0 && actualHeight > 0) {
+        this.screenWidth = actualWidth;
+        this.screenHeight = actualHeight;
+      }
+    }
 
     // Fondo espacial con efecto cyberpunk
     this.createBackground();
@@ -28,23 +43,31 @@ class DroneRepairScene extends Phaser.Scene {
     // Grid holográfico
     this.createHolographicGrid();
 
-    // Título del nivel - posicionamiento dinámico
+    // Título del nivel - posicionamiento dinámico mejorado para móviles
+    const titleFontSize = this.isMobile ? 
+      Math.min(24, this.screenWidth / 25) : 
+      Math.min(32, this.screenWidth / 35);
+    
     this.add.text(this.screenWidth / 2, this.screenHeight * 0.08, '🌌 LA INESTABILIDAD NANORROBÓTICA', {
-      fontSize: Math.min(32, this.screenWidth / 35) + 'px',
+      fontSize: titleFontSize + 'px',
       fontFamily: 'Orbitron, monospace',
       fill: '#00ffff',
       stroke: '#0066cc',
-      strokeThickness: 2,
-      shadow: { offsetX: 0, offsetY: 0, color: '#00ffff', blur: 10, fill: true }
+      strokeThickness: this.isMobile ? 1 : 2,
+      shadow: { offsetX: 0, offsetY: 0, color: '#00ffff', blur: this.isMobile ? 5 : 10, fill: true }
     }).setOrigin(0.5);
 
+    const subtitleFontSize = this.isMobile ? 
+      Math.min(18, this.screenWidth / 35) : 
+      Math.min(24, this.screenWidth / 50);
+
     this.add.text(this.screenWidth / 2, this.screenHeight * 0.12, 'EN NANOTERRA', {
-      fontSize: Math.min(24, this.screenWidth / 50) + 'px',
+      fontSize: subtitleFontSize + 'px',
       fontFamily: 'Orbitron, monospace',
       fill: '#ff6600',
       stroke: '#cc3300',
-      strokeThickness: 1,
-      shadow: { offsetX: 0, offsetY: 0, color: '#ff6600', blur: 8, fill: true }
+      strokeThickness: this.isMobile ? 0.5 : 1,
+      shadow: { offsetX: 0, offsetY: 0, color: '#ff6600', blur: this.isMobile ? 4 : 8, fill: true }
     }).setOrigin(0.5);
 
     // Pantalla holográfica de diagnóstico
@@ -141,22 +164,26 @@ class DroneRepairScene extends Phaser.Scene {
   }
 
   createDiagnosticScreen() {
-    // Dimensiones dinámicas para la pantalla de diagnóstico
-    const screenWidth = this.screenWidth * 0.7;
-    const screenHeight = this.screenHeight * 0.25;
+    // Dimensiones dinámicas para la pantalla de diagnóstico - mejorado para móviles
+    const screenWidth = this.isMobile ? this.screenWidth * 0.9 : this.screenWidth * 0.7;
+    const screenHeight = this.isMobile ? this.screenHeight * 0.2 : this.screenHeight * 0.25;
     const screenX = (this.screenWidth - screenWidth) / 2;
-    const screenY = this.screenHeight * 0.15;
+    const screenY = this.isMobile ? this.screenHeight * 0.18 : this.screenHeight * 0.15;
 
     // Marco de la pantalla holográfica
     const screenBg = this.add.graphics();
     screenBg.fillStyle(0x001133, 0.8);
-    screenBg.lineStyle(2, 0x00ffff, 0.8);
-    screenBg.fillRoundedRect(screenX, screenY, screenWidth, screenHeight, 10);
-    screenBg.strokeRoundedRect(screenX, screenY, screenWidth, screenHeight, 10);
+    screenBg.lineStyle(this.isMobile ? 1 : 2, 0x00ffff, 0.8);
+    screenBg.fillRoundedRect(screenX, screenY, screenWidth, screenHeight, this.isMobile ? 5 : 10);
+    screenBg.strokeRoundedRect(screenX, screenY, screenWidth, screenHeight, this.isMobile ? 5 : 10);
 
-    // Título de diagnóstico con posición dinámica
+    // Título de diagnóstico con posición dinámica mejorado para móviles
+    const diagnosticFontSize = this.isMobile ? 
+      Math.min(14, this.screenWidth / 45) : 
+      Math.min(18, this.screenWidth / 60);
+    
     this.add.text(this.screenWidth / 2, screenY + screenHeight * 0.2, '🔬 SISTEMA DE DIAGNÓSTICO NANORROBÓTICO', {
-      fontSize: Math.min(18, this.screenWidth / 60) + 'px',
+      fontSize: diagnosticFontSize + 'px',
       fontFamily: 'Rajdhani, sans-serif',
       fill: '#00ffff',
       fontWeight: 'bold'
@@ -234,16 +261,24 @@ class DroneRepairScene extends Phaser.Scene {
       loop: true
     });
 
-    // Estado del sistema con posición dinámica
+    // Estado del sistema con posición dinámica mejorado para móviles
+    const statusFontSize = this.isMobile ? 
+      Math.min(12, this.screenWidth / 55) : 
+      Math.min(14, this.screenWidth / 70);
+    
     this.statusText = this.add.text(this.screenWidth / 2, screenY + screenHeight * 0.6, 'ESTADO: ANALIZANDO NANOBOTS...', {
-      fontSize: Math.min(14, this.screenWidth / 70) + 'px',
+      fontSize: statusFontSize + 'px',
       fontFamily: 'Rajdhani, sans-serif',
       fill: '#ffff00'
     }).setOrigin(0.5);
 
-    // Contador de nanobots con posición dinámica
+    // Contador de nanobots con posición dinámica mejorado para móviles
+    const countFontSize = this.isMobile ? 
+      Math.min(10, this.screenWidth / 65) : 
+      Math.min(12, this.screenWidth / 85);
+    
     this.nanobotCount = this.add.text(this.screenWidth / 2, screenY + screenHeight * 0.8, 'NANOBOTS DETECTADOS: 0 NORMALES | 0 DEFECTUOSOS', {
-      fontSize: Math.min(12, this.screenWidth / 85) + 'px',
+      fontSize: countFontSize + 'px',
       fontFamily: 'Rajdhani, sans-serif',
       fill: '#ffffff'
     }).setOrigin(0.5);
@@ -571,29 +606,37 @@ class DroneRepairScene extends Phaser.Scene {
   }
 
   createQuiz() {
-    // Dimensiones dinámicas para el panel del quiz
-    const quizWidth = this.screenWidth * 0.8;
-    const quizHeight = this.screenHeight * 0.3;
+    // Dimensiones dinámicas para el panel del quiz - mejorado para móviles
+    const quizWidth = this.isMobile ? this.screenWidth * 0.95 : this.screenWidth * 0.8;
+    const quizHeight = this.isMobile ? this.screenHeight * 0.35 : this.screenHeight * 0.3;
     const quizX = (this.screenWidth - quizWidth) / 2;
-    const quizY = this.screenHeight * 0.50;
+    const quizY = this.isMobile ? this.screenHeight * 0.45 : this.screenHeight * 0.50;
 
     // Panel del quiz con dimensiones dinámicas
     const quizBg = this.add.graphics();
     quizBg.fillStyle(0x000066, 0.9);
-    quizBg.lineStyle(2, 0xff6600, 0.8);
-    quizBg.fillRoundedRect(quizX, quizY, quizWidth, quizHeight, 10);
-    quizBg.strokeRoundedRect(quizX, quizY, quizWidth, quizHeight, 10);
+    quizBg.lineStyle(this.isMobile ? 1 : 2, 0xff6600, 0.8);
+    quizBg.fillRoundedRect(quizX, quizY, quizWidth, quizHeight, this.isMobile ? 5 : 10);
+    quizBg.strokeRoundedRect(quizX, quizY, quizWidth, quizHeight, this.isMobile ? 5 : 10);
 
-    // Pregunta con posición dinámica
+    // Pregunta con posición dinámica mejorada para móviles
+    const titleQuizFontSize = this.isMobile ? 
+      Math.min(14, this.screenWidth / 50) : 
+      Math.min(16, this.screenWidth / 65);
+    
     this.add.text(this.screenWidth / 2, quizY + quizHeight * 0.15, '🧬 PROTOCOLO DE EMERGENCIA NANORROBÓTICA', {
-      fontSize: Math.min(16, this.screenWidth / 65) + 'px',
+      fontSize: titleQuizFontSize + 'px',
       fontFamily: 'Orbitron, monospace',
       fill: '#ff6600',
       fontWeight: 'bold'
     }).setOrigin(0.5);
 
+    const questionFontSize = this.isMobile ? 
+      Math.min(12, this.screenWidth / 60) : 
+      Math.min(14, this.screenWidth / 75);
+
     this.add.text(this.screenWidth / 2, quizY + quizHeight * 0.35, '¿Cuál es el protocolo correcto para detener la replicación descontrolada?', {
-      fontSize: Math.min(14, this.screenWidth / 75) + 'px',
+      fontSize: questionFontSize + 'px',
       fontFamily: 'Rajdhani, sans-serif',
       fill: '#ffffff',
       wordWrap: { width: quizWidth * 0.9 }
@@ -612,21 +655,33 @@ class DroneRepairScene extends Phaser.Scene {
       button.fillStyle(0x003366, 0.8);
       button.lineStyle(1, 0x00ffff, 0.6);
 
-      // Dimensiones dinámicas para los botones
-      const buttonWidth = quizWidth * 0.45;
-      const buttonHeight = quizHeight * 0.18;
-      button.fillRoundedRect(0, 0, buttonWidth, buttonHeight, 5);
-      button.strokeRoundedRect(0, 0, buttonWidth, buttonHeight, 5);
+      // Dimensiones dinámicas para los botones - mejorado para móviles
+      const buttonWidth = this.isMobile ? quizWidth * 0.9 : quizWidth * 0.45;
+      const buttonHeight = this.isMobile ? quizHeight * 0.12 : quizHeight * 0.18;
+      button.fillRoundedRect(0, 0, buttonWidth, buttonHeight, this.isMobile ? 3 : 5);
+      button.strokeRoundedRect(0, 0, buttonWidth, buttonHeight, this.isMobile ? 3 : 5);
 
-      // Posicionamiento dinámico de los botones
-      const x = index < 2 ? quizX + quizWidth * 0.05 : quizX + quizWidth * 0.5;
-      const y = index % 2 === 0 ? quizY + quizHeight * 0.55 : quizY + quizHeight * 0.78;
+      // Posicionamiento dinámico de los botones - mejorado para móviles
+      let x, y;
+      if (this.isMobile) {
+        // En móviles, apilar verticalmente
+        x = quizX + (quizWidth - buttonWidth) / 2;
+        y = quizY + quizHeight * 0.5 + (index * (buttonHeight + 5));
+      } else {
+        // En desktop, mantener el layout 2x2
+        x = index < 2 ? quizX + quizWidth * 0.05 : quizX + quizWidth * 0.5;
+        y = index % 2 === 0 ? quizY + quizHeight * 0.55 : quizY + quizHeight * 0.78;
+      }
 
       button.x = x;
       button.y = y;
 
+      const buttonFontSize = this.isMobile ? 
+        Math.min(10, this.screenWidth / 70) : 
+        Math.min(12, this.screenWidth / 90);
+
       const text = this.add.text(x + buttonWidth / 2, y + buttonHeight / 2, option.text, {
-        fontSize: Math.min(12, this.screenWidth / 90) + 'px',
+        fontSize: buttonFontSize + 'px',
         fontFamily: 'Rajdhani, sans-serif',
         fill: '#ffffff'
       }).setOrigin(0.5);
@@ -640,16 +695,16 @@ class DroneRepairScene extends Phaser.Scene {
         button.clear();
         button.fillStyle(0x004488, 0.9);
         button.lineStyle(2, 0x00ffff, 0.8);
-        button.fillRoundedRect(0, 0, buttonWidth, buttonHeight, 5);
-        button.strokeRoundedRect(0, 0, buttonWidth, buttonHeight, 5);
+        button.fillRoundedRect(0, 0, buttonWidth, buttonHeight, this.isMobile ? 3 : 5);
+        button.strokeRoundedRect(0, 0, buttonWidth, buttonHeight, this.isMobile ? 3 : 5);
       });
 
       button.on('pointerout', () => {
         button.clear();
         button.fillStyle(0x003366, 0.8);
         button.lineStyle(1, 0x00ffff, 0.6);
-        button.fillRoundedRect(0, 0, buttonWidth, buttonHeight, 5);
-        button.strokeRoundedRect(0, 0, buttonWidth, buttonHeight, 5);
+        button.fillRoundedRect(0, 0, buttonWidth, buttonHeight, this.isMobile ? 3 : 5);
+        button.strokeRoundedRect(0, 0, buttonWidth, buttonHeight, this.isMobile ? 3 : 5);
       });
     });
 

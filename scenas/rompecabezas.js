@@ -4,7 +4,7 @@ class Rompecabezas extends Phaser.Scene {
     this.nanorrobotsControlados = 0;
     this.nanorrobotsTotal = 0;
     this.nivelActual = 1;
-    this.nivelesMax = 3;
+    this.nivelesMax = 2;
     this.juegoActivo = false;
     this.puntos = 0;
     this.puntosParaBonus = 500;
@@ -1045,13 +1045,8 @@ class Rompecabezas extends Phaser.Scene {
         this.puntosParaCompletarNivel = 250; // Puntos necesarios para nivel 1 (reducidos)
         break;
       case 2:
-        this.puntosParaCompletarNivel = 400; // Puntos necesarios para nivel 2 (reducidos)
-        break;
-      case 3:
-        this.puntosParaCompletarNivel = 600; // Puntos necesarios para nivel 3 (reducidos)
-        break;
       default:
-        this.puntosParaCompletarNivel = 600; // Más desafiante en nivel 3
+        this.puntosParaCompletarNivel = 400; // Puntos necesarios para nivel 2 (reducidos)
         break;
     }
 
@@ -1125,11 +1120,11 @@ class Rompecabezas extends Phaser.Scene {
         velocidadReplicacion = 3000; // Replicación moderada
         velocidadMovimiento = 60; // Movimiento moderado
         break;
-      case 3:
+      case 2:
       default:
-        cantidadInicial = 8; // Más nanorrobots en nivel 3
-        velocidadReplicacion = 2000; // Replicación más rápida
-        velocidadMovimiento = 80; // Movimiento más rápido
+        cantidadInicial = 6; // Más nanorrobots en nivel 2
+        velocidadReplicacion = 2500; // Replicación más rápida
+        velocidadMovimiento = 70; // Movimiento más rápido
         break;
     }
 
@@ -1472,274 +1467,13 @@ class Rompecabezas extends Phaser.Scene {
         this.nivelActual++;
         this.iniciarJuego();
       } else {
-        // MENSAJE DE FELICITACIONES CON DISEÑO EDUCATIVO MEJORADO
-        Swal.fire({
-          title: null,
-          html: `
-            <style>
-              @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Roboto:wght@300;400;500;600&display=swap');
-
-              .swal2-popup {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-                border: none !important;
-                border-radius: 20px !important;
-                box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3) !important;
-                font-family: 'Roboto', sans-serif !important;
-                overflow: hidden !important;
-              }
-
-              .victory-container {
-                padding: 0 !important;
-                text-align: center !important;
-                position: relative !important;
-              }
-
-              .header-section {
-                background: linear-gradient(45deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3) !important;
-                background-size: 400% 400% !important;
-                animation: gradientShift 3s ease infinite !important;
-                padding: 30px 20px !important;
-                position: relative !important;
-                overflow: hidden !important;
-              }
-
-              .header-section::before {
-                content: '' !important;
-                position: absolute !important;
-                top: 0 !important;
-                left: 0 !important;
-                right: 0 !important;
-                bottom: 0 !important;
-                background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="20" cy="20" r="2" fill="white" opacity="0.3"><animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/></circle><circle cx="80" cy="30" r="1.5" fill="white" opacity="0.4"><animate attributeName="opacity" values="0.4;1;0.4" dur="1.5s" repeatCount="indefinite"/></circle><circle cx="60" cy="70" r="1" fill="white" opacity="0.5"><animate attributeName="opacity" values="0.5;1;0.5" dur="1.8s" repeatCount="indefinite"/></circle></svg>') !important;
-              }
-
-              @keyframes gradientShift {
-                0% { background-position: 0% 50%; }
-                50% { background-position: 100% 50%; }
-                100% { background-position: 0% 50%; }
-              }
-
-              .victory-title {
-                font-family: 'Orbitron', monospace !important;
-                font-size: 28px !important;
-                font-weight: 900 !important;
-                color: #ffffff !important;
-                margin: 0 !important;
-                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3) !important;
-                letter-spacing: 2px !important;
-                position: relative !important;
-                z-index: 2 !important;
-              }
-
-              .victory-subtitle {
-                font-family: 'Roboto', sans-serif !important;
-                font-size: 14px !important;
-                font-weight: 300 !important;
-                color: rgba(255, 255, 255, 0.9) !important;
-                margin-top: 8px !important;
-                letter-spacing: 1px !important;
-                position: relative !important;
-                z-index: 2 !important;
-              }
-
-              .content-section {
-                background: #ffffff !important;
-                padding: 40px 30px !important;
-                position: relative !important;
-              }
-
-              .achievement-badge {
-                width: 80px !important;
-                height: 80px !important;
-                background: linear-gradient(45deg, #ffd700, #ffed4e) !important;
-                border-radius: 50% !important;
-                margin: -40px auto 30px !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-                box-shadow: 0 8px 16px rgba(255, 215, 0, 0.3) !important;
-                position: relative !important;
-                animation: pulse 2s ease-in-out infinite !important;
-              }
-
-              .achievement-badge::before {
-                content: '🏆' !important;
-                font-size: 40px !important;
-              }
-
-              @keyframes pulse {
-                0%, 100% { transform: scale(1); }
-                50% { transform: scale(1.05); }
-              }
-
-              .stats-grid {
-                display: grid !important;
-                grid-template-columns: 1fr 1fr !important;
-                gap: 20px !important;
-                margin: 30px 0 !important;
-              }
-
-              .stat-card {
-                background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%) !important;
-                border-radius: 15px !important;
-                padding: 20px !important;
-                color: white !important;
-                box-shadow: 0 4px 15px rgba(240, 147, 251, 0.3) !important;
-                transform: translateY(0) !important;
-                transition: transform 0.3s ease !important;
-              }
-
-              .stat-card:hover {
-                transform: translateY(-5px) !important;
-              }
-
-              .stat-number {
-                font-family: 'Orbitron', monospace !important;
-                font-size: 24px !important;
-                font-weight: 700 !important;
-                margin-bottom: 5px !important;
-              }
-
-              .stat-label {
-                font-size: 12px !important;
-                font-weight: 400 !important;
-                opacity: 0.9 !important;
-                text-transform: uppercase !important;
-                letter-spacing: 0.5px !important;
-              }
-
-              .educational-section {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-                border-radius: 15px !important;
-                padding: 25px !important;
-                margin: 25px 0 !important;
-                color: white !important;
-                position: relative !important;
-                overflow: hidden !important;
-              }
-
-              .educational-section::before {
-                content: '💡' !important;
-                position: absolute !important;
-                top: 15px !important;
-                right: 15px !important;
-                font-size: 24px !important;
-                opacity: 0.7 !important;
-              }
-
-              .educational-title {
-                font-family: 'Orbitron', monospace !important;
-                font-size: 16px !important;
-                font-weight: 600 !important;
-                margin-bottom: 15px !important;
-                color: #ffd700 !important;
-              }
-
-              .educational-text {
-                font-size: 14px !important;
-                line-height: 1.6 !important;
-                font-weight: 300 !important;
-                text-align: left !important;
-              }
-
-              .swal2-confirm {
-                background: linear-gradient(45deg, #667eea, #764ba2) !important;
-                border: none !important;
-                border-radius: 25px !important;
-                font-family: 'Orbitron', monospace !important;
-                font-size: 14px !important;
-                font-weight: 600 !important;
-                color: #ffffff !important;
-                padding: 15px 30px !important;
-                text-transform: uppercase !important;
-                letter-spacing: 1px !important;
-                transition: all 0.3s ease !important;
-                box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4) !important;
-              }
-
-              .swal2-confirm:hover {
-                transform: translateY(-2px) !important;
-                box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6) !important;
-              }
-            </style>
-
-            <div class="victory-container">
-              <div class="header-section">
-                <div class="victory-title">¡MISIÓN COMPLETADA!</div>
-                <div class="victory-subtitle">Protocolo de Contención NanoTerra</div>
-              </div>
-
-              <div class="content-section">
-                <div class="achievement-badge"></div>
-
-                <div class="stats-grid">
-                  <div class="stat-card">
-                    <div class="stat-number">${this.puntos}</div>
-                    <div class="stat-label">Puntos Totales</div>
-                  </div>
-                  <div class="stat-card">
-                    <div class="stat-number">${this.nivelesMax}</div>
-                    <div class="stat-label">Niveles Completados</div>
-                  </div>
-                </div>
-
-                <div class="educational-section">
-                  <div class="educational-title">¿Sabías que...?</div>
-                  <div class="educational-text">
-                    Los nanobots reales se utilizan en medicina para administrar medicamentos de forma precisa,
-                    reparar tejidos dañados y combatir enfermedades a nivel celular. ¡Tu habilidad para contenerlos
-                    podría ser útil en el futuro de la nanotecnología médica!
-                  </div>
-                </div>
-              </div>
-            </div>
-          `,
-          icon: null,
-          confirmButtonText: 'Continuar Aventura',
-          width: '550px',
-          padding: '0',
-          customClass: {
-            popup: 'educational-victory-popup'
-          },
-          buttonsStyling: false,
-          allowOutsideClick: false,
-          showClass: {
-            popup: 'animate__animated animate__bounceIn'
-          },
-          hideClass: {
-            popup: 'animate__animated animate__fadeOut'
-          }
-        }).then(() => {
-          // Cerrar cualquier SweetAlert activo antes de cambiar de escena
-          Swal.close();
-
-          // Crear efecto de transición de apagado
-          const fadeOverlay = this.add.rectangle(
-            this.sys.game.config.width / 2,
-            this.sys.game.config.height / 2,
-            this.sys.game.config.width,
-            this.sys.game.config.height,
-            0x000000,
-            0
-          ).setDepth(1000);
-
-          // Animación de oscurecimiento
-          this.tweens.add({
-            targets: fadeOverlay,
-            alpha: 1,
-            duration: 1500,
-            ease: 'Power2.easeInOut',
-            onComplete: () => {
-              // Juego completado, pasar a la escena de fallos
-              if (this.sounds && this.sounds.transicionNivel) {
-                this.sounds.transicionNivel.play();
-              }
-              // Pequeña pausa antes de la transición para que se escuche el sonido
-              this.time.delayedCall(500, () => {
-                this.scene.start("DroneRepairScene");
-              });
-            }
-          });
+        // Juego completado, pasar a la siguiente escena
+        if (this.sounds && this.sounds.transicionNivel) {
+          this.sounds.transicionNivel.play();
+        }
+        // Pequeña pausa antes de la transición para que se escuche el sonido
+        this.time.delayedCall(500, () => {
+          this.scene.start("DroneRepairScene");
         });
       }
     });
