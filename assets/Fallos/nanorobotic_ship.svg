@@ -1,0 +1,124 @@
+<svg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+  <!-- Definiciones de gradientes y filtros -->
+  <defs>
+    <!-- Gradiente para el cuerpo principal -->
+    <linearGradient id="shipBodyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#00ffff;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#0088ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0044aa;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Gradiente para el núcleo -->
+    <radialGradient id="coreGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#00ffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0066cc;stop-opacity:1" />
+    </radialGradient>
+    
+    <!-- Gradiente para los propulsores -->
+    <linearGradient id="thrusterGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff4400;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#ffaa00;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ffff00;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Filtro de resplandor -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge> 
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/> 
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Cuerpo principal de la nave (forma triangular futurista) -->
+  <path d="M30 5 L50 45 L35 40 L30 50 L25 40 L10 45 Z" 
+        fill="url(#shipBodyGradient)" 
+        stroke="#00aaff" 
+        stroke-width="1.5" 
+        filter="url(#glow)"/>
+  
+  <!-- Alas laterales -->
+  <path d="M15 25 L5 35 L15 30 Z" 
+        fill="url(#shipBodyGradient)" 
+        stroke="#00aaff" 
+        stroke-width="1"/>
+  <path d="M45 25 L55 35 L45 30 Z" 
+        fill="url(#shipBodyGradient)" 
+        stroke="#00aaff" 
+        stroke-width="1"/>
+  
+  <!-- Núcleo central -->
+  <circle cx="30" cy="25" r="6" 
+          fill="url(#coreGradient)" 
+          stroke="#ffffff" 
+          stroke-width="1" 
+          filter="url(#glow)">
+    <!-- Animación de pulsación -->
+    <animate attributeName="r" values="6;8;6" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="1;0.7;1" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Propulsores traseros -->
+  <ellipse cx="20" cy="42" rx="3" ry="8" 
+           fill="url(#thrusterGradient)" 
+           stroke="#ff6600" 
+           stroke-width="0.5">
+    <animate attributeName="ry" values="8;12;8" dur="0.5s" repeatCount="indefinite"/>
+  </ellipse>
+  <ellipse cx="40" cy="42" rx="3" ry="8" 
+           fill="url(#thrusterGradient)" 
+           stroke="#ff6600" 
+           stroke-width="0.5">
+    <animate attributeName="ry" values="8;12;8" dur="0.5s" repeatCount="indefinite"/>
+  </ellipse>
+  
+  <!-- Antenas/sensores -->
+  <line x1="25" y1="15" x2="22" y2="8" 
+        stroke="#00ffff" 
+        stroke-width="2" 
+        stroke-linecap="round">
+    <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+  </line>
+  <line x1="35" y1="15" x2="38" y2="8" 
+        stroke="#00ffff" 
+        stroke-width="2" 
+        stroke-linecap="round">
+    <animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/>
+  </line>
+  
+  <!-- Puntos de luz en las antenas -->
+  <circle cx="22" cy="8" r="2" 
+          fill="#ffffff" 
+          filter="url(#glow)">
+    <animate attributeName="opacity" values="1;0.2;1" dur="1.5s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="38" cy="8" r="2" 
+          fill="#ffffff" 
+          filter="url(#glow)">
+    <animate attributeName="opacity" values="1;0.2;1" dur="1.5s" repeatCount="indefinite"/>
+  </circle>
+  
+  <!-- Detalles tecnológicos en el cuerpo -->
+  <rect x="27" y="18" width="6" height="2" 
+        fill="#00ffff" 
+        opacity="0.8">
+    <animate attributeName="opacity" values="0.8;0.3;0.8" dur="3s" repeatCount="indefinite"/>
+  </rect>
+  <rect x="27" y="22" width="6" height="2" 
+        fill="#00ffff" 
+        opacity="0.6">
+    <animate attributeName="opacity" values="0.6;0.2;0.6" dur="3s" repeatCount="indefinite"/>
+  </rect>
+  
+  <!-- Escudo de energía (opcional, sutil) -->
+  <circle cx="30" cy="25" r="18" 
+          fill="none" 
+          stroke="#00ffff" 
+          stroke-width="0.5" 
+          opacity="0.3">
+    <animate attributeName="r" values="18;22;18" dur="4s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.3;0.1;0.3" dur="4s" repeatCount="indefinite"/>
+  </circle>
+</svg>
