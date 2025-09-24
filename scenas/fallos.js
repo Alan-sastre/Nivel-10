@@ -16,6 +16,134 @@ class scenaFallos extends Phaser.Scene {
     this.gameStartTime = 0; // Tiempo de inicio del juego
   }
 
+  // NUEVA FUNCIÓN: Configurar orientación móvil sin reiniciar escena
+  setupMobileOrientation() {
+    // Función para verificar orientación sin reiniciar
+    const checkOrientation = () => {
+      const isLandscape = window.innerWidth > window.innerHeight;
+      
+      // Si ya existe un mensaje de orientación, lo eliminamos
+      if (this.orientationText) {
+        this.orientationText.destroy();
+        this.orientationText = null;
+      }
+      
+      // Si no está en modo horizontal, mostrar mensaje sin bloquear el juego
+      if (!isLandscape) {
+        this.orientationText = this.add.text(
+          this.cameras.main.width / 2,
+          this.cameras.main.height / 2,
+          "Para mejor experiencia, gira tu dispositivo a modo horizontal",
+          {
+            fontSize: '20px',
+            fill: '#ffff00',
+            fontFamily: 'Arial Bold',
+            align: 'center',
+            stroke: '#000000',
+            strokeThickness: 3,
+            backgroundColor: 'rgba(0,0,0,0.7)',
+            padding: { x: 20, y: 10 }
+          }
+        ).setOrigin(0.5).setDepth(999);
+        
+        // Hacer que el mensaje desaparezca después de 3 segundos
+        this.time.delayedCall(3000, () => {
+          if (this.orientationText) {
+            this.tweens.add({
+              targets: this.orientationText,
+              alpha: 0,
+              duration: 500,
+              onComplete: () => {
+                if (this.orientationText) {
+                  this.orientationText.destroy();
+                  this.orientationText = null;
+                }
+              }
+            });
+          }
+        });
+      }
+    };
+    
+    // Verificar orientación inicial
+    checkOrientation();
+    
+    // Escuchar cambios de orientación sin reiniciar la escena
+    const handleResize = () => {
+      // Usar un pequeño delay para evitar múltiples llamadas
+      if (this.orientationTimer) {
+        clearTimeout(this.orientationTimer);
+      }
+      this.orientationTimer = setTimeout(checkOrientation, 100);
+    };
+    
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('orientationchange', handleResize);
+    
+    // Limpiar eventos cuando se destruya la escena
+    this.events.on('shutdown', () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('orientationchange', handleResize);
+      if (this.orientationTimer) {
+        clearTimeout(this.orientationTimer);
+      }
+    });
+  }
+
+  // NUEVA FUNCIÓN: Implementar sistema de colisión con barreras estáticas
+  checkBarrierCollisions(newBarrier = null) {
+    try {
+      // Si no hay nanobots o barreras, no hacer nada
+      if (!this.nanobots || this.nanobots.length === 0 || !this.barriers || this.barriers.length === 0) {
+        return;
+      }
+
+      // Si se proporciona una nueva barrera, verificar solo contra ella
+      const barriersToCheck = newBarrier ? [newBarrier] : this.barriers;
+      
+      // Iterar hacia atrás para evitar problemas con splice
+      for (let i = this.nanobots.length - 1; i >= 0; i--) {
+        const nanobot = this.nanobots[i];
+        if (!nanobot || !nanobot.active) continue;
+        
+        // Verificar colisión con cada barrera
+        for (const barrier of barriersToCheck) {
+          if (!barrier || !barrier.active) continue;
+          
+          // Calcular distancia entre nanobot y barrera
+          const distance = Phaser.Math.Distance.Between(nanobot.x, nanobot.y, barrier.x, barrier.y);
+          
+          // Radio de colisión (ajustable según el tamaño de las barreras)
+          const collisionRadius = 40; // Radio de colisión para las barreras
+          
+          if (distance < collisionRadius) {
+            // Colisión detectada - detener movimiento y destruir el nanobot
+            console.log(`[DEBUG] Colisión detectada entre nanobot en (${nanobot.x}, ${nanobot.y}) y barrera en (${barrier.x}, ${barrier.y})`);
+            
+            // CRÍTICO: Detener todos los tweens del nanobot para evitar que siga moviéndose
+            this.tweens.killTweensOf(nanobot);
+            
+            // Crear efecto de colisión
+            this.createSpectacularCollisionEffect(nanobot.x, nanobot.y, barrier);
+            
+            // Reproducir sonido de colisión con barrera
+            if (this.sounds && this.sounds.barrierHit) {
+              // SONIDO ELIMINADO POR SOLICITUD DEL USUARIO
+              // this.sounds.barrierHit.play();
+            }
+            
+            // Destruir el nanobot
+            this.destroyNanobot(nanobot, i);
+            break; // Salir del bucle de barreras para este nanobot
+          }
+        }
+      }
+    } catch (error) {
+      console.error('[ERROR] Error en checkBarrierCollisions:', error);
+      console.error('[ERROR] Stack trace:', error.stack);
+    }
+  }
+
   preload() {
   
     // Cargar imagen de nanorobots
@@ -33,6 +161,14 @@ class scenaFallos extends Phaser.Scene {
   }
 
   create() {
+    // Detectar si es dispositivo móvil
+    this.isMobile = /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
+    
+    // Configurar orientación para móviles sin reiniciar la escena
+    if (this.isMobile) {
+      this.setupMobileOrientation();
+    }
+    
     // Cerrar cualquier SweetAlert activo al iniciar la escena
     if (typeof Swal !== 'undefined') {
       Swal.close();
@@ -1332,8 +1468,8 @@ class scenaFallos extends Phaser.Scene {
     
     container.add(nanobot);
     
-    // Solo movimiento hacia el centro, sin animaciones adicionales
-    const speed = Math.max(8000, 12000 - (this.currentLevel * 800));
+    // Solo movimiento hacia el centro, sin animaciones adicionales - VELOCIDAD AUMENTADA
+    const speed = Math.max(4000, 8000 - (this.currentLevel * 600)); // Reducido de 8000-12000 a 4000-8000
     this.tweens.add({
       targets: container,
       x: 500,
@@ -1396,8 +1532,8 @@ class scenaFallos extends Phaser.Scene {
     container.add(engineParticles);
     container.engineParticles = engineParticles;
     
-    // Solo movimiento hacia el centro, sin animaciones adicionales
-    const baseSpeed = Math.max(7000, 10000 - (this.currentLevel * 600));
+    // Solo movimiento hacia el centro, sin animaciones adicionales - VELOCIDAD AUMENTADA
+    const baseSpeed = Math.max(3500, 6000 - (this.currentLevel * 400)); // Reducido de 7000-10000 a 3500-6000
     
     // Movimiento principal hacia el centro
     this.tweens.add({
@@ -2413,18 +2549,20 @@ class scenaFallos extends Phaser.Scene {
     }
     
     // Mostrar mensaje de felicitaciones al completar puntos - centrado y tamaño ajustado
-    const congratsMessage = this.add.text(400, 250, '¡FELICITACIONES!', {
-      fontSize: '24px',
+    const congratsMessage = this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2 - 30, '¡FELICITACIONES!', {
+      fontSize: '32px',
       fill: '#00ff00',
       fontFamily: 'Arial Bold',
       stroke: '#003300',
-      strokeThickness: 2
+      strokeThickness: 3
     }).setOrigin(0.5).setDepth(1000);
     
-    const levelMessage = this.add.text(400, 280, `¡Nivel ${this.currentLevel} Completado!`, {
-      fontSize: '16px',
+    const levelMessage = this.add.text(this.cameras.main.width / 2, this.cameras.main.height / 2 + 10, `¡Nivel ${this.currentLevel} Completado!`, {
+      fontSize: '20px',
       fill: '#ffff00',
-      fontFamily: 'Arial Bold'
+      fontFamily: 'Arial Bold',
+      stroke: '#333300',
+      strokeThickness: 2
     }).setOrigin(0.5).setDepth(1000);
     
     // Efecto de desvanecimiento para los mensajes
@@ -3508,16 +3646,21 @@ class scenaFallos extends Phaser.Scene {
 
   showMissionComplete() {
     console.log('Ejecutando showMissionComplete');
-    // Crear fondo espectacular con gradiente animado - más pequeño y con mayor depth
-    const overlay = this.add.rectangle(400, 300, 600, 450, 0x001144, 0.98);
+    
+    // Obtener dimensiones dinámicas de la cámara
+    const centerX = this.cameras.main.width / 2;
+    const centerY = this.cameras.main.height / 2;
+    
+    // Crear fondo espectacular con gradiente animado - centrado dinámicamente
+    const overlay = this.add.rectangle(centerX, centerY, 600, 450, 0x001144, 0.98);
     overlay.setStrokeStyle(6, 0x00ffff);
     overlay.setDepth(1000); // Asegurar que esté por encima de todo
     
-    // Crear partículas de celebración
+    // Crear partículas de celebración - ajustadas a las dimensiones de la pantalla
     for (let i = 0; i < 30; i++) {
       const particle = this.add.circle(
-        Phaser.Math.Between(100, 700),
-        Phaser.Math.Between(75, 525),
+        Phaser.Math.Between(centerX - 300, centerX + 300),
+        Phaser.Math.Between(centerY - 225, centerY + 225),
         Phaser.Math.Between(2, 4),
         Phaser.Math.Between(0x00ff00, 0x00ffff),
         0.8
@@ -3533,8 +3676,8 @@ class scenaFallos extends Phaser.Scene {
       });
     }
     
-    // Título principal con animación espectacular - más pequeño
-    const mainTitle = this.add.text(400, 150, '¡MISIÓN COMPLETADA!', {
+    // Título principal con animación espectacular - centrado dinámicamente
+    const mainTitle = this.add.text(centerX, centerY - 150, '¡MISIÓN COMPLETADA!', {
       fontSize: '36px',
       fill: '#00ffff',
       fontFamily: 'Arial Black',
@@ -3553,10 +3696,10 @@ class scenaFallos extends Phaser.Scene {
       ease: 'Sine.easeInOut'
     });
     
-    // Crear naves nanorobóticas decorativas - más pequeñas
+    // Crear naves nanorobóticas decorativas - centradas dinámicamente
     for (let i = 0; i < 3; i++) {
-      const shipX = 250 + (i * 100);
-      const shipY = 200;
+      const shipX = centerX - 100 + (i * 100);
+      const shipY = centerY - 100;
       
       // Cuerpo principal de la nave
       const shipBody = this.add.ellipse(shipX, shipY, 30, 15, 0x00aaff, 0.9);
@@ -3591,25 +3734,25 @@ class scenaFallos extends Phaser.Scene {
       });
     }
     
-    // Mensajes de felicitación
-    const subtitle = this.add.text(400, 180, 'NanoTerra ha sido salvado', {
+    // Mensajes de felicitación - centrados dinámicamente
+    const subtitle = this.add.text(centerX, centerY - 120, 'NanoTerra ha sido salvado', {
       fontSize: '24px',
       fill: '#ffffff',
       fontFamily: 'Arial Bold'
     }).setOrigin(0.5).setDepth(1004);
     
-    this.add.text(400, 260, 'Los nanorrobots han sido contenidos exitosamente', {
+    this.add.text(centerX, centerY - 40, 'Los nanorrobots han sido contenidos exitosamente', {
       fontSize: '18px',
       fill: '#00ff88'
     }).setOrigin(0.5).setDepth(1004);
     
-    this.add.text(400, 285, 'Los materiales inteligentes están reparados', {
+    this.add.text(centerX, centerY - 15, 'Los materiales inteligentes están reparados', {
       fontSize: '18px',
       fill: '#00ff88'
     }).setOrigin(0.5).setDepth(1004);
     
-    // Puntuación con efecto especial
-    const scoreText = this.add.text(400, 330, `PUNTUACIÓN FINAL: ${this.score} PUNTOS`, {
+    // Puntuación con efecto especial - centrada dinámicamente
+    const scoreText = this.add.text(centerX, centerY + 30, `PUNTUACIÓN FINAL: ${this.score} PUNTOS`, {
       fontSize: '22px',
       fill: '#ffaa00',
       fontFamily: 'Arial Bold',
@@ -3627,8 +3770,8 @@ class scenaFallos extends Phaser.Scene {
       repeat: -1
     });
     
-    // Mensaje de logro
-    const achievementText = this.add.text(400, 370, '¡ERES UN HÉROE DE NANOTERRA!', {
+    // Mensaje de logro - centrado dinámicamente
+    const achievementText = this.add.text(centerX, centerY + 70, '¡ERES UN HÉROE DE NANOTERRA!', {
       fontSize: '20px',
       fill: '#ffff00',
       fontFamily: 'Arial Bold',
@@ -3645,8 +3788,8 @@ class scenaFallos extends Phaser.Scene {
       repeat: -1
     });
     
-    // Botón para continuar a la siguiente escena
-    const continueBtn = this.add.rectangle(400, 450, 280, 60, 0x006600, 0.9)
+    // Botón para continuar a la siguiente escena - centrado dinámicamente
+    const continueBtn = this.add.rectangle(centerX, centerY + 150, 280, 60, 0x006600, 0.9)
       .setStrokeStyle(3, 0x00ff00)
       .setDepth(1005)
       .setInteractive()
@@ -3663,7 +3806,7 @@ class scenaFallos extends Phaser.Scene {
         continueBtn.setScale(1.0);
       });
     
-    const continueText = this.add.text(400, 450, 'HAZ CLICK PARA CONTINUAR', {
+    const continueText = this.add.text(centerX, centerY + 150, 'HAZ CLICK PARA CONTINUAR', {
       fontSize: '18px',
       fill: '#ffffff',
       fontFamily: 'Arial Bold',
@@ -3903,6 +4046,11 @@ class scenaFallos extends Phaser.Scene {
       // Verificar colisiones con el escudo si hay nanobots
       if (this.nanobots && this.nanobots.length > 0 && this.shield) {
         this.checkShieldCollisions();
+      }
+      
+      // Verificar colisiones con barreras estáticas
+      if (this.nanobots && this.nanobots.length > 0 && this.barriers && this.barriers.length > 0) {
+        this.checkBarrierCollisions();
       }
     }
   }
