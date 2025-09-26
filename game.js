@@ -25,13 +25,7 @@ var config = {
     willReadFrequently: true,
   },
   scene: [
-    scenaPrincipal,
-    scenaVideo,
-    ArduinoNanobotScene,
-    Rompecabezas,
-    DroneRepairScene,
-    scenaVideo2,
-    scenaFallos,
+
     SelfHealingMaterialScene,
     scenaVideo4,
     Ultima,

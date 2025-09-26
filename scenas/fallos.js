@@ -585,7 +585,7 @@ class scenaFallos extends Phaser.Scene {
     });
     
     // Título principal con efectos espectaculares
-    const title = this.add.text(500, 100, 'NANORROBOTS DE NANOTERRA', {
+    const title = this.add.text(500, 100, 'nanorobots DE NANOTERRA', {
       fontSize: '36px',
       fill: '#00ffff',
       fontFamily: 'Arial Black',
@@ -738,7 +738,7 @@ class scenaFallos extends Phaser.Scene {
       strokeThickness: 1
     }).setOrigin(0.5);
     
-    const subInstruction = this.add.text(500, 360, 'Usa barreras de energía para contener los nanorrobots', {
+    const subInstruction = this.add.text(500, 360, 'Usa barreras de energía para contener los nanorobots', {
       fontSize: '12px',
       fill: '#88aacc',
       fontFamily: 'Arial',
@@ -1275,7 +1275,7 @@ class scenaFallos extends Phaser.Scene {
       5: "Desafío final - 80 nanobots con 3 barreras"
     };
     
-    const currentObjective = levelObjectives[this.currentLevel] || "Haz clic para colocar barreras de energía y detener los nanorrobots";
+    const currentObjective = levelObjectives[this.currentLevel] || "Haz clic para colocar barreras de energía y detener los nanorobots";
     
     this.add.text(400, 570, currentObjective, {
       fontSize: '16px',
@@ -2611,7 +2611,7 @@ class scenaFallos extends Phaser.Scene {
       strokeThickness: 2
     }).setOrigin(0.5);
     
-    const text1 = this.add.text(500, 250, 'Los nanorrobots han sido contenidos.', {
+    const text1 = this.add.text(500, 250, 'Los nanorobots han sido contenidos.', {
       fontSize: '16px',
       fill: '#ffffff',
       fontFamily: 'Arial'
@@ -2837,7 +2837,7 @@ class scenaFallos extends Phaser.Scene {
     }).setOrigin(0.5);
     
     // Centrar el texto descriptivo
-    this.add.text(400, 240, 'Los nanorrobots han alcanzado el núcleo', {
+    this.add.text(400, 240, 'Los nanorobots han alcanzado el núcleo', {
       fontSize: '14px',
       fill: '#ffffff'
     }).setOrigin(0.5);
@@ -3326,7 +3326,7 @@ class scenaFallos extends Phaser.Scene {
     }).setOrigin(0.5);
     
     // Subtítulo con efectos
-    const subtitleText = this.add.text(400, 210, '⚡ NANORROBOTS CONTENIDOS ⚡', {
+    const subtitleText = this.add.text(400, 210, '⚡ nanorobots CONTENIDOS ⚡', {
       fontSize: '28px',
       fill: '#00ff88',
       fontFamily: 'Arial Bold',
@@ -3741,7 +3741,7 @@ class scenaFallos extends Phaser.Scene {
       fontFamily: 'Arial Bold'
     }).setOrigin(0.5).setDepth(1004);
     
-    this.add.text(centerX, centerY - 40, 'Los nanorrobots han sido contenidos exitosamente', {
+    this.add.text(centerX, centerY - 40, 'Los nanorobots han sido contenidos exitosamente', {
       fontSize: '18px',
       fill: '#00ff88'
     }).setOrigin(0.5).setDepth(1004);

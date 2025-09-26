@@ -1141,7 +1141,7 @@ class DroneRepairScene extends Phaser.Scene {
       fontWeight: 'bold'
     }).setOrigin(0.5);
 
-    const feedbackMessage = this.add.text(this.screenWidth / 2, this.screenHeight * 0.45, '¡Correcto! La apoptosis programada evita que los nanorrobots se\nmultipliquen indefinidamente y garantiza su control seguro.\nEste protocolo es esencial en la nanotecnología médica moderna.', {
+    const feedbackMessage = this.add.text(this.screenWidth / 2, this.screenHeight * 0.45, '¡Correcto! La apoptosis programada evita que los nanorobots se\nmultipliquen indefinidamente y garantiza su control seguro.\nEste protocolo es esencial en la nanotecnología médica moderna.', {
       fontSize: Math.min(14, this.screenWidth / 60) + 'px',
       fill: '#ffffff',
       fontFamily: 'Rajdhani, sans-serif',
@@ -1470,7 +1470,7 @@ class DroneRepairScene extends Phaser.Scene {
     }).setOrigin(0.5);
 
     // Mensaje de retroalimentación detallado
-    const feedbackMessage = this.add.text(400, 190, '¡Correcto! La apoptosis programada evita que los nanorrobots se\nmultipliquen indefinidamente y garantiza su control seguro.', {
+    const feedbackMessage = this.add.text(400, 190, '¡Correcto! La apoptosis programada evita que los nanorobots se\nmultipliquen indefinidamente y garantiza su control seguro.', {
       fontSize: '14px',
       fill: '#ffffff',
       fontFamily: 'Rajdhani, sans-serif',

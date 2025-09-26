@@ -350,7 +350,7 @@ class ArduinoNanobotScene extends Phaser.Scene {
         feedback: 'Incorrecto. El sensor ya está definido correctamente como INPUT en el setup().'
       },
       { 
-        text: '(B) No hay un sistema de control para evitar eliminar más nanorrobots de los necesarios.', 
+        text: '(B) No hay un sistema de control para evitar eliminar más nanorobots de los necesarios.', 
         correct: true,
         feedback: '¡Correcto! El código no tiene un mecanismo para apagar el sistema después de eliminar nanobots, lo que podría causar una eliminación excesiva y descontrolada. Necesita un delay y apagar el sistema después de actuar.'
       },
@@ -360,7 +360,7 @@ class ArduinoNanobotScene extends Phaser.Scene {
         feedback: 'Incorrecto. analogRead() es correcto para leer valores analógicos del sensor.'
       },
       { 
-        text: '(D) El código no permite que los nanorrobots operen en ciclos autónomos.', 
+        text: '(D) El código no permite que los nanorobots operen en ciclos autónomos.', 
         correct: false,
         feedback: 'Incorrecto. El loop() permite operación continua, este no es el problema principal.'
       }

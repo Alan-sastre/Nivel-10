@@ -1,8 +1,8 @@
 class Rompecabezas extends Phaser.Scene {
   constructor() {
     super({ key: "Rompecabezas" });
-    this.nanorrobotsControlados = 0;
-    this.nanorrobotsTotal = 0;
+    this.nanorobotsControlados = 0;
+    this.nanorobotsTotal = 0;
     this.nivelActual = 1;
     this.nivelesMax = 2;
     this.juegoActivo = false;
@@ -220,7 +220,7 @@ class Rompecabezas extends Phaser.Scene {
 
     // Añadir título - ajustado para pantalla completa
     const fontSize = this.isMobile ? '32px' : Math.min(28, screenWidth * 0.035) + 'px';
-    this.add.text(screenWidth / 2, Math.min(50, screenHeight * 0.08), 'NANORROBOTS: PROTOCOLO DE CONTENCIÓN', {
+    this.add.text(screenWidth / 2, Math.min(50, screenHeight * 0.08), 'NANOROBOTS: PROTOCOLO DE CONTENCIÓN', {
       font: `${fontSize} Orbitron`,
       fill: '#00ffff',
       align: 'center',
@@ -240,11 +240,18 @@ class Rompecabezas extends Phaser.Scene {
     const instruccionesFontSize = this.isMobile ? '24px' : Math.min(20, screenWidth * 0.028) + 'px';
     const instruccionesY = Math.min(120, screenHeight * 0.2);
 
-    this.instruccionesTexto = this.add.text(screenWidth / 2, instruccionesY, '⚡ CONTÉN LOS NANOBOTS EN EL REACTOR ⚡', {
-      font: `${instruccionesFontSize} Orbitron`,
-      fill: '#00ffaa',
-      align: 'center'
-    }).setOrigin(0.5);
+    this.instruccionesTexto = this.add
+      .text(
+        screenWidth / 2,
+        instruccionesY,
+        "⚡ CONTÉN LOS NANOROBOTS EN EL REACTOR ⚡",
+        {
+          font: `${instruccionesFontSize} Orbitron`,
+          fill: "#00ffaa",
+          align: "center",
+        }
+      )
+      .setOrigin(0.5);
 
     // Crear área de juego
     this.crearAreaJuego();
@@ -252,8 +259,8 @@ class Rompecabezas extends Phaser.Scene {
     // Configurar eventos de interacción
     this.configurarEventos();
 
-    // Añadir contador de nanorrobots - posición adaptativa
-    this.contadorTexto = this.add.text(screenWidth / 2, screenHeight - Math.min(50, screenHeight * 0.1), `Nanorrobots contenidos: ${this.nanorrobotsControlados}/${this.nanorrobotsTotal}`, {
+    // Añadir contador de nanorobots - posición adaptativa
+    this.contadorTexto = this.add.text(screenWidth / 2, screenHeight - Math.min(50, screenHeight * 0.1), `Nanorobots contenidos: ${this.nanorobotsControlados}/${this.nanorobotsTotal}`, {
       font: `${instruccionesFontSize} Rajdhani`,
       fill: '#00ffff',
       align: 'center',
@@ -662,7 +669,7 @@ class Rompecabezas extends Phaser.Scene {
       ease: 'Sine.easeInOut'
     });
 
-    // Crear un contenedor más elaborado para los nanorrobots
+    // Crear un contenedor más elaborado para los nanorobots
     // Primero, crear un grupo para contener todos los elementos del contenedor
     this.contenedorGroup = this.add.group();
 
@@ -739,8 +746,8 @@ class Rompecabezas extends Phaser.Scene {
     this.zonaContenedor.body.setAllowGravity(false);
     this.zonaContenedor.body.moves = false;
 
-    // Grupo para los nanorrobots
-    this.nanorrobotsGroup = this.physics.add.group();
+    // Grupo para los nanorobots
+    this.nanorobotsGroup = this.physics.add.group();
 
     // Añadir un efecto de pulso al contenedor
     this.tweens.add({
@@ -767,7 +774,7 @@ class Rompecabezas extends Phaser.Scene {
   verificarCompletarNivel() {
     if (this.juegoActivo) {
       // Verificar si TODOS los nanobots están contenidos
-      if (this.nanorrobotsControlados >= this.nanorrobotsTotal && this.nanorrobotsTotal > 0) {
+      if (this.nanorobotsControlados >= this.nanorobotsTotal && this.nanorobotsTotal > 0) {
         // Mostrar mensaje de nanobots contenidos
         const screenWidth = this.sys.game.config.width;
         const screenHeight = this.sys.game.config.height;
@@ -797,7 +804,7 @@ class Rompecabezas extends Phaser.Scene {
 
   // Método para actualizar el nivel de contención visual
   actualizarNivelContencion() {
-    if (!this.nanorrobotsTotal) return;
+    if (!this.nanorobotsTotal) return;
 
     // Usar el porcentaje de contención calculado en actualizarContadores
     const porcentajeContención = this.nivelContencionPorcentaje / 100;
@@ -1028,8 +1035,8 @@ class Rompecabezas extends Phaser.Scene {
 
   iniciarJuego() {
     this.juegoActivo = true;
-    this.nanorrobotsControlados = 0;
-    this.nanorrobotsTotal = 0;
+    this.nanorobotsControlados = 0;
+    this.nanorobotsTotal = 0;
     this.puntos = 0; // Reiniciar puntos
     this.puntosParaCompletarNivel = 0; // Inicializar puntos necesarios para completar nivel
     this.brilloActivado = false; // Inicializar estado del efecto de brillo
@@ -1073,7 +1080,7 @@ class Rompecabezas extends Phaser.Scene {
     // DESACTIVADO: No establecer temporizador de replicación automática
     // const replicacionDelay = Math.max(1000, 4000 - (this.nivelActual * 500));
 
-    // Iniciar la generación de nanorrobots según el nivel
+    // Iniciar la generación de nanorobots según el nivel
     this.iniciarNivel(this.nivelActual);
 
     // Mostrar mensaje de inicio de nivel
@@ -1100,8 +1107,8 @@ class Rompecabezas extends Phaser.Scene {
   }
 
   iniciarNivel(nivel) {
-    // Limpiar nanorrobots existentes
-    this.nanorrobotsGroup.clear(true, true);
+    // Limpiar nanorobots existentes
+    this.nanorobotsGroup.clear(true, true);
 
     // Configurar dificultad según el nivel (reducida para facilitar avance)
     let cantidadInicial;
@@ -1111,7 +1118,7 @@ class Rompecabezas extends Phaser.Scene {
     // Ajustar parámetros según el nivel
     switch(nivel) {
       case 1:
-        cantidadInicial = 8; // Más nanorrobots en nivel 1 para mayor desafío
+        cantidadInicial = 8; // Más nanorobots en nivel 1 para mayor desafío
         velocidadReplicacion = 4000; // Replicación más lenta
         velocidadMovimiento = 40; // Movimiento más lento
         break;
@@ -1122,23 +1129,23 @@ class Rompecabezas extends Phaser.Scene {
         break;
       case 2:
       default:
-        cantidadInicial = 6; // Más nanorrobots en nivel 2
+        cantidadInicial = 6; // Más nanorobots en nivel 2
         velocidadReplicacion = 2500; // Replicación más rápida
         velocidadMovimiento = 70; // Movimiento más rápido
         break;
     }
 
-    // Inicializar con algunos nanorrobots ya controlados para evitar 100% de contención al inicio
-    this.nanorrobotsTotal = 0; // Empezar en 0
-    this.nanorrobotsControlados = 0; // Empezar en 0
+    // Inicializar con algunos nanorobots ya controlados para evitar 100% de contención al inicio
+    this.nanorobotsTotal = 0; // Empezar en 0
+    this.nanorobotsControlados = 0; // Empezar en 0
     this.nivelContencionPorcentaje = 0; // 0% de contención inicial
 
-    // Crear nanorrobots iniciales
-    const nanorrobotsCreados = [];
+    // Crear nanorobots iniciales
+    const nanorobotsCreados = [];
     for (let i = 0; i < cantidadInicial; i++) {
       const nanorrobot = this.crearNanorrobot();
-      nanorrobotsCreados.push(nanorrobot);
-      this.nanorrobotsTotal++; // Incrementar contador correctamente
+      nanorobotsCreados.push(nanorrobot);
+      this.nanorobotsTotal++; // Incrementar contador correctamente
     }
 
     // Ya no marcamos nanobots como controlados al inicio - empezar en 0
@@ -1175,10 +1182,10 @@ class Rompecabezas extends Phaser.Scene {
     );
 
     // Crear el nanorrobot con tamaño más grande y visible
-    const nanorrobot = this.nanorrobotsGroup.create(x, y, 'nanorrobot');
+    const nanorrobot = this.nanorobotsGroup.create(x, y, 'nanorrobot');
     const nanoSize = Math.min(35, Math.max(30, screenWidth * 0.03)); // Tamaño aún más grande entre 30 y 35 píxeles
     nanorrobot.setDisplaySize(nanoSize, nanoSize);
-    nanorrobot.setTint(0xff0000); // Color rojo para los nanorrobots no contenidos
+    nanorrobot.setTint(0xff0000); // Color rojo para los nanorobots no contenidos
 
     // Hacer que el nanorrobot sea interactivo
     nanorrobot.setInteractive();
@@ -1190,24 +1197,24 @@ class Rompecabezas extends Phaser.Scene {
     nanorrobot.velocidadY = Phaser.Math.Between(-velocidadBase, velocidadBase);
 
     // SOLO incrementar durante la inicialización del nivel, NO durante replicación
-    // No incrementamos this.nanorrobotsTotal aquí para evitar conteo duplicado
+    // No incrementamos this.nanorobotsTotal aquí para evitar conteo duplicado
 
     return nanorrobot;
   }
 
-  replicarNanorrobots() {
+  replicarnanorobots() {
     // FUNCIÓN DESACTIVADA - No se replican nanobots automáticamente
     // El juego ahora funciona solo con los nanobots iniciales creados
     return;
   }
 
   actualizarContadores() {
-    this.contadorTexto.setText(`Nanorrobots contenidos: ${this.nanorrobotsControlados}/${this.nanorrobotsTotal}`);
+    this.contadorTexto.setText(`nanorobots contenidos: ${this.nanorobotsControlados}/${this.nanorobotsTotal}`);
 
     // Calcular porcentaje de contención (inverso al porcentaje de control)
     // 0% = todos controlados, 100% = ninguno controlado
-    if (this.nanorrobotsTotal > 0) {
-      const controlados = this.nanorrobotsControlados / this.nanorrobotsTotal;
+    if (this.nanorobotsTotal > 0) {
+      const controlados = this.nanorobotsControlados / this.nanorobotsTotal;
       this.nivelContencionPorcentaje = Math.min(100, Math.floor((1 - controlados) * 100));
     } else {
       this.nivelContencionPorcentaje = 0;
@@ -1283,7 +1290,7 @@ class Rompecabezas extends Phaser.Scene {
     // Mostrar mensaje de game over
     Swal.fire({
       title: '¡Alerta de Replicación!',
-      text: 'Los nanorrobots han superado la capacidad de contención. La estabilidad de NanoTerra está en riesgo.',
+      text: 'Los nanorobots han superado la capacidad de contención. La estabilidad de NanoTerra está en riesgo.',
       icon: 'error',
       confirmButtonText: 'Reintentar',
       customClass: {
@@ -1299,8 +1306,8 @@ class Rompecabezas extends Phaser.Scene {
   update() {
     if (!this.juegoActivo) return;
 
-    // Mover los nanorrobots
-    const nanorrobots = this.nanorrobotsGroup.getChildren();
+    // Mover los nanorobots
+    const nanorobots = this.nanorobotsGroup.getChildren();
     const screenWidth = this.sys.game.config.width;
     const screenHeight = this.sys.game.config.height;
 
@@ -1316,8 +1323,8 @@ class Rompecabezas extends Phaser.Scene {
     const limiteSuperior = recuadroY - (recuadroHeight/2 - margenInterno);
     const limiteInferior = recuadroY + (recuadroHeight/2 - margenInterno);
 
-    for (let i = 0; i < nanorrobots.length; i++) {
-      const nanorrobot = nanorrobots[i];
+    for (let i = 0; i < nanorobots.length; i++) {
+      const nanorrobot = nanorobots[i];
 
       // Solo mover si no está siendo arrastrado
       if (nanorrobot.input.dragState === 0) {
@@ -1375,7 +1382,7 @@ class Rompecabezas extends Phaser.Scene {
       const bounds = this.zonaContenedor.getBounds();
       if (Phaser.Geom.Rectangle.Contains(bounds, gameObject.x, gameObject.y)) {
         // Nanorrobot contenido
-        this.nanorrobotsControlados++;
+        this.nanorobotsControlados++;
         this.actualizarContadores();
 
         // Añadir puntos flotantes
@@ -1425,8 +1432,8 @@ class Rompecabezas extends Phaser.Scene {
         this.sounds.capturaExitosa.play();
       }
 
-        // Verificar si se han contenido todos los nanorrobots
-        if (this.nanorrobotsControlados >= this.nanorrobotsTotal) {
+        // Verificar si se han contenido todos los nanorobots
+        if (this.nanorobotsControlados >= this.nanorobotsTotal) {
           this.nivelCompletado();
         }
       } else {
