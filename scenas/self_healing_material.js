@@ -67,23 +67,23 @@ class SelfHealingMaterialScene extends Phaser.Scene {
   }
 
   createAdvancedControlPanels() {
-    // Panel izquierdo - Monitoreo de IA con efectos avanzados (reposicionado)
+    // Panel izquierdo - Monitoreo de IA con efectos avanzados (reposicionado más arriba)
     const leftPanel = this.add.graphics();
     leftPanel.fillStyle(0x1e3a8a, 0.4);
-    leftPanel.fillRoundedRect(20, 350, 200, 140, 15);
+    leftPanel.fillRoundedRect(20, 30, 200, 140, 15);
 
     // Borde con efecto de brillo
     leftPanel.lineStyle(3, 0x3b82f6, 1);
-    leftPanel.strokeRoundedRect(20, 350, 200, 140, 15);
+    leftPanel.strokeRoundedRect(20, 30, 200, 140, 15);
     leftPanel.lineStyle(1, 0x60a5fa, 0.8);
-    leftPanel.strokeRoundedRect(22, 352, 196, 136, 13);
+    leftPanel.strokeRoundedRect(22, 32, 196, 136, 13);
 
     // Efecto de brillo interno
     const leftGlow = this.add.graphics();
     leftGlow.fillStyle(0x3b82f6, 0.1);
-    leftGlow.fillRoundedRect(25, 355, 190, 130, 12);
+    leftGlow.fillRoundedRect(25, 35, 190, 130, 12);
 
-    this.add.text(120, 365, 'SISTEMA DE IA', {
+    this.add.text(120, 45, 'SISTEMA DE IA', {
       fontSize: '12px',
       fontFamily: 'Orbitron, Courier, monospace',
       fill: '#60a5fa',
@@ -95,8 +95,8 @@ class SelfHealingMaterialScene extends Phaser.Scene {
     // Línea decorativa
     const decorLine = this.add.graphics();
     decorLine.lineStyle(2, 0x60a5fa, 0.8);
-    decorLine.moveTo(40, 380);
-    decorLine.lineTo(200, 380);
+    decorLine.moveTo(40, 60);
+    decorLine.lineTo(200, 60);
     decorLine.strokePath();
 
     // Indicadores del sistema mejorados
@@ -108,7 +108,7 @@ class SelfHealingMaterialScene extends Phaser.Scene {
 
   createAdvancedSystemIndicators() {
     // Estado de la IA
-    this.add.text(120, 395, 'ESTADO: AUTÓNOMA', {
+    this.add.text(120, 75, 'ESTADO: AUTÓNOMA', {
       fontSize: '10px',
       fontFamily: 'Orbitron, Courier, monospace',
       fill: '#ef4444',
@@ -118,7 +118,7 @@ class SelfHealingMaterialScene extends Phaser.Scene {
     }).setOrigin(0.5);
 
     // Nivel de confianza (texto inicial que será actualizado dinámicamente)
-    const initialTrustText = this.add.text(120, 415, 'CONFIANZA: 0%', {
+    const initialTrustText = this.add.text(120, 95, 'CONFIANZA: 0%', {
       fontSize: '10px',
       fontFamily: 'Orbitron, Courier, monospace',
       fill: '#f59e0b',
@@ -133,15 +133,15 @@ class SelfHealingMaterialScene extends Phaser.Scene {
     // Barra de progreso de confianza
     const trustBar = this.add.graphics();
     trustBar.fillStyle(0x374151, 0.8);
-    trustBar.fillRoundedRect(50, 425, 140, 8, 4);
+    trustBar.fillRoundedRect(50, 105, 140, 8, 4);
 
     this.trustProgress = this.add.graphics();
     this.trustProgress.fillStyle(0xf59e0b, 0.9);
     // Iniciar con ancho 0 para mostrar 0% de confianza
-    this.trustProgress.fillRoundedRect(50, 425, 0, 8, 4);
+    this.trustProgress.fillRoundedRect(50, 105, 0, 8, 4);
 
     // Procesos activos
-    this.add.text(60, 445, 'PROCESOS ACTIVOS:', {
+    this.add.text(60, 125, 'PROCESOS ACTIVOS:', {
       fontSize: '9px',
       fontFamily: 'Orbitron, Courier, monospace',
       fill: '#94a3b8',
@@ -156,14 +156,14 @@ class SelfHealingMaterialScene extends Phaser.Scene {
     ];
 
     processes.forEach((process, index) => {
-      const processText = this.add.text(60, 455 + (index * 10), process, {
+      const processText = this.add.text(60, 135 + (index * 10), process, {
         fontSize: '7px',
         fontFamily: 'Orbitron, Courier, monospace',
         fill: '#10b981'
       });
 
       // Indicador parpadeante
-      const indicator = this.add.circle(55, 460 + (index * 10), 2, 0x10b981);
+      const indicator = this.add.circle(55, 140 + (index * 10), 2, 0x10b981);
       this.tweens.add({
         targets: indicator,
         alpha: { from: 1, to: 0.3 },
@@ -175,23 +175,23 @@ class SelfHealingMaterialScene extends Phaser.Scene {
   }
 
   createAdvancedSecurityProtocols() {
-    // Panel derecho - Protocolos de seguridad (reposicionado)
+    // Panel derecho - Protocolos de seguridad (reposicionado arriba)
     const rightPanel = this.add.graphics();
     rightPanel.fillStyle(0x7c2d12, 0.4);
-    rightPanel.fillRoundedRect(780, 350, 200, 140, 15);
+    rightPanel.fillRoundedRect(780, 30, 200, 140, 15);
 
     // Borde con efecto de brillo
     rightPanel.lineStyle(3, 0xf97316, 1);
-    rightPanel.strokeRoundedRect(780, 350, 200, 140, 15);
+    rightPanel.strokeRoundedRect(780, 30, 200, 140, 15);
     rightPanel.lineStyle(1, 0xfb923c, 0.8);
-    rightPanel.strokeRoundedRect(782, 352, 196, 136, 13);
+    rightPanel.strokeRoundedRect(782, 32, 196, 136, 13);
 
     // Efecto de brillo interno
     const rightGlow = this.add.graphics();
     rightGlow.fillStyle(0xf97316, 0.1);
-    rightGlow.fillRoundedRect(785, 355, 190, 130, 12);
+    rightGlow.fillRoundedRect(785, 35, 190, 130, 12);
 
-    this.add.text(880, 365, 'PROTOCOLOS', {
+    this.add.text(880, 45, 'PROTOCOLOS', {
       fontSize: '12px',
       fontFamily: 'Orbitron, Courier, monospace',
       fill: '#fb923c',
@@ -203,19 +203,19 @@ class SelfHealingMaterialScene extends Phaser.Scene {
     // Línea decorativa
     const decorLine2 = this.add.graphics();
     decorLine2.lineStyle(2, 0xfb923c, 0.8);
-    decorLine2.moveTo(800, 380);
-    decorLine2.lineTo(960, 380);
+    decorLine2.moveTo(800, 60);
+    decorLine2.lineTo(960, 60);
     decorLine2.strokePath();
 
     // Estado de supervisión
-    this.add.text(880, 395, 'SUPERVISIÓN HUMANA:', {
+    this.add.text(880, 75, 'SUPERVISIÓN HUMANA:', {
       fontSize: '9px',
       fontFamily: 'Orbitron, Courier, monospace',
       fill: '#ffffff',
       fontWeight: 'bold'
     }).setOrigin(0.5);
 
-    this.add.text(880, 410, 'DESACTIVADA', {
+    this.add.text(880, 90, 'DESACTIVADA', {
       fontSize: '10px',
       fontFamily: 'Orbitron, Courier, monospace',
       fill: '#ef4444',
@@ -225,7 +225,7 @@ class SelfHealingMaterialScene extends Phaser.Scene {
     }).setOrigin(0.5);
 
     // Protocolos de seguridad
-    this.add.text(880, 430, 'PROTOCOLOS DE SEGURIDAD:', {
+    this.add.text(880, 110, 'PROTOCOLOS DE SEGURIDAD:', {
       fontSize: '9px',
       fontFamily: 'Orbitron, Courier, monospace',
       fill: '#ffffff',
@@ -240,14 +240,14 @@ class SelfHealingMaterialScene extends Phaser.Scene {
     ];
 
     protocols.forEach((protocol, index) => {
-      this.add.text(810, 445 + (index * 10), protocol, {
+      this.add.text(810, 125 + (index * 10), protocol, {
         fontSize: '7px',
         fontFamily: 'Orbitron, Courier, monospace',
         fill: '#ffffff'
       });
 
       // Indicador de alerta
-      const alertIndicator = this.add.circle(805, 450 + (index * 10), 2, 0xef4444);
+      const alertIndicator = this.add.circle(805, 130 + (index * 10), 2, 0xef4444);
       this.tweens.add({
         targets: alertIndicator,
         alpha: { from: 1, to: 0.3 },
@@ -1260,7 +1260,7 @@ class SelfHealingMaterialScene extends Phaser.Scene {
       const trustColor = this.aiTrust > 70 ? 0x10b981 : this.aiTrust > 40 ? 0xf59e0b : 0xef4444;
 
       this.trustProgress.fillStyle(trustColor, 0.9);
-      this.trustProgress.fillRoundedRect(50, 425, trustWidth, 8, 4); // Coordenadas actualizadas para coincidir con la nueva posición
+      this.trustProgress.fillRoundedRect(50, 105, trustWidth, 8, 4); // Coordenadas devueltas a la posición original
     }
 
     // Actualizar texto de confianza
@@ -1269,7 +1269,7 @@ class SelfHealingMaterialScene extends Phaser.Scene {
       trustText.destroy();
     }
 
-    const newTrustText = this.add.text(120, 415, `CONFIANZA: ${this.aiTrust}%`, { // Posición actualizada para coincidir con la nueva posición
+    const newTrustText = this.add.text(120, 95, `CONFIANZA: ${this.aiTrust}%`, { // Posición devuelta a la original
       fontSize: '10px',
       fontFamily: 'Orbitron, Courier, monospace',
       fill: this.aiTrust > 70 ? '#10b981' : this.aiTrust > 40 ? '#f59e0b' : '#ef4444',
