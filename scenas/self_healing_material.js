@@ -126,7 +126,7 @@ class SelfHealingMaterialScene extends Phaser.Scene {
       stroke: '#78350f',
       strokeThickness: 1
     }).setOrigin(0.5);
-    
+
     // Asignar nombre para poder actualizarlo después
     initialTrustText.setName('trustText');
 
@@ -151,8 +151,6 @@ class SelfHealingMaterialScene extends Phaser.Scene {
     const processes = [
       '• Análisis de datos',
       '• Toma de decisiones',
-      '• Aprendizaje autónomo',
-      '• Optimización de sistemas'
     ];
 
     processes.forEach((process, index) => {
